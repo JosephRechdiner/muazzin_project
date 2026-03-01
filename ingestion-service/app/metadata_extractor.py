@@ -2,14 +2,14 @@ from datetime import datetime
 from pathlib import Path
 import os
 
-def get_metadata(podcast_path: str):
+def extract_metadata(podcast_path: str):
     """
     The function is responsible for extracting metadata for the current podcast path
     """
     metadata = {}
 
     file_path = Path(podcast_path)
-    metadata["file_path"] = file_path
+    metadata["file_path"] = str(file_path)
 
     file_name = file_path.name
     metadata["file_name"] = file_name
