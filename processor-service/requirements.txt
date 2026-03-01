@@ -6,8 +6,8 @@ click==8.3.1
 colorama==0.4.6
 confluent-kafka==2.13.0
 dnspython==2.8.0
-elastic-transport==9.2.1
-elasticsearch==9.3.0
+elastic-transport==8.17.1
+elasticsearch==8.12.0
 fastapi==0.135.0
 h11==0.16.0
 idna==3.11
@@ -22,3 +22,4 @@ typing-inspection==0.4.2
 typing_extensions==4.15.0
 urllib3==2.6.3
 uvicorn==0.41.0
+
