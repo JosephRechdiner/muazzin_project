@@ -37,20 +37,26 @@ services:
     depends_on:
       - kafka
 
-  ingestion-service:
-    build: 
-      context: .
-      dockerfile: ./ingestion-service/Dockerfile
+  mongo:
+    image: mongo
     ports:
-      - "8000:8000"
-    environment:
-      BOOTSTRAP_SERVERS: kafka:9092
-      PODCASTS_DIR_PATH: /app/podcasts
-      SEND_TOPC: podcasts-metadatas
-    volumes:
-      - ./podcasts:/app/podcasts
-    depends_on:
-      - kafka
+      - "27017:27017"
+
+      
+  # ingestion-service:
+  #   build: 
+  #     context: .
+  #     dockerfile: ./ingestion-service/Dockerfile
+  #   ports:
+  #     - "8000:8000"
+  #   environment:
+  #     BOOTSTRAP_SERVERS: kafka:9092
+  #     PODCASTS_DIR_PATH: /app/podcasts
+  #     SEND_TOPC: podcasts-metadatas
+  #   volumes:
+  #     - ./podcasts:/app/podcasts
+  #   depends_on:
+  #     - kafka
 
 volumes:
   kafka_kraft:
