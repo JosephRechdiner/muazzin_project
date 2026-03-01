@@ -7,6 +7,7 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 COPY  ./podcasts /app/podcasts
+COPY  ./shared /app/shared
 
 COPY ./ingestion-service .
 
