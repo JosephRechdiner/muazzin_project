@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Request, Depends
 from kafka_producer import KafkaProducer
 from metadata_extractor import get_metadata
+from shared.models import FileMetadata
 import glob
 
 
@@ -20,7 +21,14 @@ def start_process(kafka_producer: KafkaProducer = Depends(get_kafka_producer)):
     podcasts_paths = glob.glob("./podcasts/*.wav")
     for podcast_path in podcasts_paths:
         cur_metadata = get_metadata(podcast_path)
-
         
+        validated_metadata = FileMetadata(**cur_metadata)
 
-        kafka_producer.send_to_kafka(cur_metadata)
+        all_metadatas.append(validated_metadata.model_dump())
+
+        kafka_producer.send_to_kafka(validated_metadata.model_dump())
+
+    return {
+        "Status": "Metadatas Sent!",
+        "Metadatas": all_metadatas
+    }

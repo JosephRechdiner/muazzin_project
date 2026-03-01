@@ -12,7 +12,7 @@ logger = logging.getLogger('ingestion-service')
 async def lifespan(app: FastAPI):
     app.state.config = IngestionConfig(logger)
     app.state.config.validate()
-    app.state.kafka_producer = KafkaProducer()
+    app.state.kafka_producer = KafkaProducer(logger)
     yield
 
 app = FastAPI(lifespan=lifespan)
