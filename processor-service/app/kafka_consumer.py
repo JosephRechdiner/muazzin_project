@@ -1,5 +1,5 @@
 from confluent_kafka import Consumer
-from logging import Logger
+from logger import Logger
 import json
 
 class KafkaConsumer:

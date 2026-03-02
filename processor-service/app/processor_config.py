@@ -1,4 +1,4 @@
-from logging import Logger
+from logger import Logger
 import os
 
 class ProcessorConfig:

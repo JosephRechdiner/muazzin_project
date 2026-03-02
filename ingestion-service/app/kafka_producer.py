@@ -1,4 +1,4 @@
-from logging import Logger
+from app.logger import Logger
 from confluent_kafka import Producer
 import json
 
@@ -19,7 +19,7 @@ class KafkaProducer:
         Serves as confirm messege for produce method
         """
         if error:
-            self.logger.error(f"Could not send msg to kafka %s", error)
+            self.logger.error(f"Could not send msg to kafka %s", error.value())
         else:
             self.logger.info(f"Sent to kafka: %s", msg.value())
 
