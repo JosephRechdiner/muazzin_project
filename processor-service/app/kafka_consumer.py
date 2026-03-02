@@ -1,6 +1,7 @@
 from confluent_kafka import Consumer
 from logger import Logger
 import json
+import uuid
 
 class KafkaConsumer:
     """ 
@@ -15,6 +16,7 @@ class KafkaConsumer:
                 "bootstrap.servers": bootstrap_servers,
                 "group.id": group_id
             }) 
+            self.logger.info(f"Consumer has connnected to Kafka")
         except Exception as e:
             self.logger.exception(f"Could not connect to Kafka, Error: {str(e)}")
             raise
@@ -40,20 +42,19 @@ class KafkaConsumer:
             except Exception:
                 self.logger.error(f"Could not decode msg")
 
-
             try:
-                response = save_in_mongo_callback(value["file_path"], file_id)
+                response = save_in_mongo_callback(file_id, value["file_path"])
                 if response:
                     self.logger.info(f"Inserted to MongoDB: %s", value)
             except Exception as e:
-                self.logger.error(f"Could save data in mongo, Error: {str(e)}")
+                self.logger.error(f"Could not save data in mongo, Error: {str(e)}")
 
             try:
                 response = save_in_elastic_callback(file_id, value)
                 if response:
                     self.logger.info(f"Inserted to Elastic Search: %s", value)
             except Exception as e:
-                self.logger.error(f"Could not save data in elastic, Error: {str(e)}")
+                self.logger.error(f"Could not save data in Elastic, Error: {str(e)}")
 
             file_id = str(int(file_id) + 1)
 

@@ -11,6 +11,7 @@ class KafkaProducer:
         self.send_topic = send_topic
         try:
             self.producer = Producer({'bootstrap.servers': bootstrap_servers})
+            self.logger.info(f"Producer has connnected to Kafka")
         except Exception as e:
             self.logger.exception(f"Could not connect to Kafka, Error %s", str(e))
 
