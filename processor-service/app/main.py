@@ -3,9 +3,9 @@ from processor_config import ProcessorConfig
 from elastic_client import ElasticClient
 from mongo_connector import MongoManager
 from kafka_consumer import KafkaConsumer
+from logger import Logger
 
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger('processor-service')
+logger = Logger.get_logger()
 
 def main():
     config = ProcessorConfig(logger)

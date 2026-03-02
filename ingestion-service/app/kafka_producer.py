@@ -1,4 +1,4 @@
-from logging import Logger
+from app.logger import Logger
 from confluent_kafka import Producer
 import json
 
@@ -11,6 +11,7 @@ class KafkaProducer:
         self.send_topic = send_topic
         try:
             self.producer = Producer({'bootstrap.servers': bootstrap_servers})
+            self.logger.info(f"Producer has connnected to Kafka")
         except Exception as e:
             self.logger.exception(f"Could not connect to Kafka, Error %s", str(e))
 
@@ -19,7 +20,7 @@ class KafkaProducer:
         Serves as confirm messege for produce method
         """
         if error:
-            self.logger.error(f"Could not send msg to kafka %s", error)
+            self.logger.error(f"Could not send msg to kafka %s", error.value())
         else:
             self.logger.info(f"Sent to kafka: %s", msg.value())
 

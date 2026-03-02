@@ -1,4 +1,4 @@
-from logging import Logger
+from app.logger import Logger
 import os
 
 class IngestionConfig:

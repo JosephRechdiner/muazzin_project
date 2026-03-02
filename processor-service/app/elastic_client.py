@@ -1,4 +1,4 @@
-from logging import Logger
+from logger import Logger
 from elasticsearch import Elasticsearch
 
 class ElasticClient:
@@ -10,6 +10,7 @@ class ElasticClient:
         self.index_name = index_name
         try:
             self.es = Elasticsearch(elastic_uri)
+            self.logger.info(f"Elastic client has connnected to Elastic Search")
         except Exception as e:
             self.logger.exception(f"Could not connect to ElasticSearch, Error: {str(e)}")
         

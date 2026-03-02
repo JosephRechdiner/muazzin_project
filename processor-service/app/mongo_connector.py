@@ -1,6 +1,6 @@
 import gridfs
 from pymongo import MongoClient
-from logging import Logger
+from logger import Logger
 
 class MongoManager:
     """ 
@@ -11,10 +11,11 @@ class MongoManager:
         self.database_name = database_name
         try:
             self.client = MongoClient(mongo_uri)
+            self.logger.info(f"Mongo client has connnected to MongoDB")
         except Exception as e:
             self.logger.exception(f"Could not connect to MongoDB, Error: {str(e)}")
 
-    def insert_metadata(self, file_path: dict, file_id: str):
+    def insert_metadata(self, file_id: str, file_path: str):
         """ 
         Inserts data to mongodb
         """
