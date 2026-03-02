@@ -21,6 +21,7 @@ def extract_metadata(podcast_path: str):
     metadata["file_format"] = file_format
 
     created_at_seconds = os.path.getctime(file_path)
+    # convert the seconds integer into real str format
     created_at_full_date = datetime.fromtimestamp(created_at_seconds).strftime("%A, %B %d, %Y %I:%M:%S")
     metadata["created_at"] = created_at_full_date
 

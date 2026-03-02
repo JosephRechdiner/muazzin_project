@@ -14,7 +14,7 @@ class MongoManager:
         except Exception as e:
             self.logger.exception(f"Could not connect to MongoDB, Error: {str(e)}")
 
-    def insert_metadata(self, file_path: dict, file_id: str):
+    def insert_metadata(self, file_path: str, file_id: str):
         """ 
         Inserts data to mongodb
         """
