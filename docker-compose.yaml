@@ -109,6 +109,7 @@ services:
       ELASTIC_URI: http://elasticsearch:9200
       INDEX_NAME: podcasts-metadatas-index
       MONGO_URI: mongodb://mongo:27017
+      SEND_TOPIC: podcasts-stt
 
     volumes:
       - ./podcasts:/app/podcasts

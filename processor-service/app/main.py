@@ -4,6 +4,7 @@ from elastic_client import ElasticClient
 from mongo_connector import MongoManager
 from kafka_consumer import KafkaConsumer
 from logger import Logger
+from kafka_producer import KafkaProducer
 
 logger = Logger.get_logger()
 
@@ -23,6 +24,12 @@ def main():
         logger=logger
     )
 
+    producer = KafkaProducer(
+        bootstrap_servers=config.bootstrap_servers,
+        send_topic=config.send_topic,
+        logger=logger
+    )
+
     consumer = KafkaConsumer(
         bootstrap_servers=config.bootstrap_servers,
         group_id=config.group_id,
@@ -32,7 +39,8 @@ def main():
 
     consumer.start(
         mongo_manager.insert_metadata,
-        es.add_to_index
+        es.add_to_index,
+        producer.produce_to_kafka
     )
 
 if __name__ == "__main__":

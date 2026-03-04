@@ -21,7 +21,7 @@ class KafkaConsumer:
             self.logger.exception(f"Could not connect to Kafka, Error: {str(e)}")
             raise
 
-    def start(self, save_in_mongo_callback, save_in_elastic_callback):
+    def start(self, save_in_mongo_callback, save_in_elastic_callback, send_to_kafka):
         """ 
         Supposed to start listening to kafka topic
         """
@@ -55,6 +55,11 @@ class KafkaConsumer:
                     self.logger.info(f"Inserted to Elastic Search: %s", value)
             except Exception as e:
                 self.logger.error(f"Could not save data in Elastic, Error: {str(e)}")
+
+            try:
+                send_to_kafka(value)
+            except Exception as e:
+                self.logger.error(f"Could not send data in Kafka, Error: {str(e)}")
 
             file_id = str(int(file_id) + 1)
 

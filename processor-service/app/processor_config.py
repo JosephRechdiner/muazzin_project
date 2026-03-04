@@ -14,6 +14,7 @@ class ProcessorConfig:
         self.elastic_uri = os.getenv("ELASTIC_URI") 
         self.index_name = os.getenv("INDEX_NAME") 
         self.mongo_uri = os.getenv("MONGO_URI") 
+        self.send_topic = os.getenv("SEND_TOPIC")
         
     def validate(self):
         """
@@ -25,6 +26,8 @@ class ProcessorConfig:
             missing.append("BOOTSTRAP_SERVERS")
         if not self.listen_topic:
             missing.append("LISTEN_TOPIC")
+        if not self.send_topic:
+            missing.append("SEND_TOPIC")
         if not self.group_id:
             missing.append("GROUP_ID")
         if not self.database_name:
