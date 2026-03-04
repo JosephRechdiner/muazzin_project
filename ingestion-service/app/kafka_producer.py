@@ -15,7 +15,7 @@ class KafkaProducer:
         except Exception as e:
             self.logger.exception(f"Could not connect to Kafka, Error %s", str(e))
 
-    def delivery_report(self, msg, error):
+    def delivery_report(self, error, msg):
         """ 
         Serves as confirm messege for produce method
         """
@@ -26,7 +26,7 @@ class KafkaProducer:
 
     def send_to_kafka(self, podcast_metadata: dict):
         """ 
-        Accual sending the podcast_metadata to kafka
+        Actual sending the podcast_metadata to kafka
         """
         try:
             value = json.dumps(podcast_metadata).encode('utf-8')

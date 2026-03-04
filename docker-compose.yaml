@@ -109,6 +109,7 @@ services:
       ELASTIC_URI: http://elasticsearch:9200
       INDEX_NAME: podcasts-metadatas-index
       MONGO_URI: mongodb://mongo:27017
+      SEND_TOPIC: podcasts-stt
 
     volumes:
       - ./podcasts:/app/podcasts
@@ -119,7 +120,28 @@ services:
         condition: service_healthy   
       elasticsearch:
         condition: service_healthy
-        
+
+  stt-service:
+    build: 
+      context: .
+      dockerfile: ./stt-service/Dockerfile
+    ports:
+      - "8020:8020"
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      LISTEN_TOPIC: podcasts-stt
+      GROUP_ID: stt-team
+      ELASTIC_URI: http://elasticsearch:9200
+      INDEX_NAME: podcasts-metadatas-index
+
+    volumes:
+      - ./podcasts:/app/podcasts
+    depends_on:
+      kafka:
+        condition: service_healthy 
+      elasticsearch:
+        condition: service_healthy
+
 volumes:
   esdata:
   kafka_kraft:
