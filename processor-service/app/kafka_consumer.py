@@ -57,6 +57,7 @@ class KafkaConsumer:
                 self.logger.error(f"Could not save data in Elastic, Error: {str(e)}")
 
             try:
+                value["file_id"] = file_id
                 send_to_kafka(value)
             except Exception as e:
                 self.logger.error(f"Could not send data in Kafka, Error: {str(e)}")

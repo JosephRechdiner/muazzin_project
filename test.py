@@ -93,3 +93,22 @@
 # a = "hello"
 # print(1 & key)
 
+from speech_recognition import Recognizer
+import speech_recognition as sr
+import glob
+import json
+import io
+
+recognizer = sr.Recognizer()
+podcats_paths = glob.glob("./podcasts/*.wav")
+
+def get_text_from_speach(file_path: str):
+    try:
+        with sr.AudioFile(file_path) as source:
+            audio = recognizer.record(source)
+
+        text = recognizer.recognize_google(audio_data=audio)
+        return text
+    except Exception as e:
+        raise Exception(f"Could not get text from speach, Error: {str(e)}")
+    
