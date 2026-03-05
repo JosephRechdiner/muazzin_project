@@ -99,16 +99,25 @@ import glob
 import json
 import io
 
-recognizer = sr.Recognizer()
-podcats_paths = glob.glob("./podcasts/*.wav")
+# recognizer = sr.Recognizer()
+# podcats_paths = glob.glob("./podcasts/*.wav")
 
-def get_text_from_speach(file_path: str):
-    try:
-        with sr.AudioFile(file_path) as source:
-            audio = recognizer.record(source)
+# def get_text_from_speach(file_path: str):
+#     try:
+#         with sr.AudioFile(file_path) as source:
+#             audio = recognizer.record(source)
 
-        text = recognizer.recognize_google(audio_data=audio)
-        return text
-    except Exception as e:
-        raise Exception(f"Could not get text from speach, Error: {str(e)}")
+#         text = recognizer.recognize_google(audio_data=audio)
+#         return text
+#     except Exception as e:
+#         raise Exception(f"Could not get text from speach, Error: {str(e)}")
     
+# import base64
+# coded_string = 'R2Vub2NpZGUsV2F'
+# print(coded_string.decode('base64'))
+
+import base64
+
+sample_string_bytes = base64.b64decode("R2Vub2NpZGUsV2F==")
+sample_string = sample_string_bytes.decode()
+print(sample_string) 
