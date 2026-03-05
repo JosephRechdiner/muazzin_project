@@ -19,6 +19,6 @@ class ElasticManager:
         """
         try:
             self.es.update(index=self.index_name, id=file_id, body={"doc": metadata, "doc_as_upsert": True})
-            self.logger.info(f"Elastic text field updated: %s", metadata["text"])
+            self.logger.info(f"Elastic text field updated: {metadata['file_text']}")
         except Exception as e:
             self.logger.error(f"Could not updata text in ElasticSearch, Error: {str(e)}")
