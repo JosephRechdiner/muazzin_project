@@ -1,5 +1,5 @@
 from elasticsearch import Elasticsearch
-from logger import Logger
+from app.logger import Logger
 
 class ElasticManager:
     """ 

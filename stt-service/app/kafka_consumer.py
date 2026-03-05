@@ -1,5 +1,6 @@
 from confluent_kafka import Consumer
-from logger import Logger
+from app.logger import Logger
+from shared.models import FileMetadataId
 import json
 
 class KafkaConsumer:
@@ -37,6 +38,12 @@ class KafkaConsumer:
             except Exception as e:
                 self.logger.error(f"Could not decode msg, Error: {str(e)}")
 
+            try:
+                pydantic_validated_value = FileMetadataId(**value)
+            except Exception as e:
+                self.logger.error(f"Could not validate pydantic types, Error: {str(e)}")
+
+            value = pydantic_validated_value.model_dump()
             try:
                 speach_in_text = stt_extractor(sr, recognizer, value["file_path"])
                 self.logger.info(f"Extract text: {speach_in_text}")

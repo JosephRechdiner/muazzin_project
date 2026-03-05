@@ -1,8 +1,8 @@
-from logger import Logger
-from stt_config import SttConfig
-from elastic_client import ElasticManager
-from kafka_consumer import KafkaConsumer
-from stt_handler import get_text_from_speach
+from app.logger import Logger
+from app.stt_config import SttConfig
+from app.elastic_client import ElasticManager
+from app.kafka_consumer import KafkaConsumer
+from app.stt_handler import get_text_from_speach
 import speech_recognition as sr
 
 logger = Logger.get_logger()

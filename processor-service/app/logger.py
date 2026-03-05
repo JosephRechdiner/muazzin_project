@@ -2,7 +2,6 @@ import logging
 from elasticsearch import Elasticsearch
 from datetime import datetime
 import logging
-from elasticsearch import Elasticsearch
 
 class Logger:
     _logger = None

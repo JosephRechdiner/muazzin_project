@@ -1,4 +1,4 @@
-from logger import Logger
+from app.logger import Logger
 from elasticsearch import Elasticsearch
 
 class ElasticClient:
