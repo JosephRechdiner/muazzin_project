@@ -133,9 +133,31 @@ services:
       GROUP_ID: stt-team
       ELASTIC_URI: http://elasticsearch:9200
       INDEX_NAME: podcasts-metadatas-index
+      SEND_TOPIC: podcasts-analytics
 
     volumes:
       - ./podcasts:/app/podcasts
+    depends_on:
+      kafka:
+        condition: service_healthy 
+      elasticsearch:
+        condition: service_healthy
+
+  analytics-service:
+    build: 
+      context: .
+      dockerfile: ./analytics-service/Dockerfile
+    ports:
+      - "8030:8030"
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: analytics-team
+      ELASTIC_URI: http://elasticsearch:9200
+      INDEX_NAME: podcasts-metadatas-index
+      LISTEN_TOPIC: podcasts-analytics
+
+    volumes:
+      - ./images:/app/images
     depends_on:
       kafka:
         condition: service_healthy 

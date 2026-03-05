@@ -2,11 +2,12 @@ import logging
 from elasticsearch import Elasticsearch
 from datetime import datetime
 import logging
+from elasticsearch import Elasticsearch
 
 class Logger:
     _logger = None
     @classmethod
-    def get_logger(cls, name="processor-service", es_host="http://elasticsearch:9200", index="logs-index", level=logging.DEBUG):
+    def get_logger(cls, name="analytics-service", es_host="http://elasticsearch:9200", index="logs-index", level=logging.DEBUG):
         if cls._logger:
             return cls._logger
         logger = logging.getLogger(name)

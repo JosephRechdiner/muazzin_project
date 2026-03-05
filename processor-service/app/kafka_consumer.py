@@ -1,7 +1,7 @@
 from confluent_kafka import Consumer
-from logger import Logger
+from app.logger import Logger
+from shared.models import FileMetadata
 import json
-import uuid
 
 class KafkaConsumer:
     """ 
@@ -42,6 +42,12 @@ class KafkaConsumer:
             except Exception:
                 self.logger.error(f"Could not decode msg")
 
+            try:
+                pydantic_validated_value = FileMetadata(**value)
+            except Exception as e:
+                self.logger.error(f"Could not validate pydantic types, Error: {str(e)}")
+
+            value = pydantic_validated_value.model_dump()
             try:
                 response = save_in_mongo_callback(file_id, value["file_path"])
                 if response:

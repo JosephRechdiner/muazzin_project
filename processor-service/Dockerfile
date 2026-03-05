@@ -11,4 +11,4 @@ COPY ./shared /app/shared
 
 COPY ./processor-service .
 
-CMD [ "python", "app/main.py" ]
+CMD [ "python", "-m", "app.main" ]

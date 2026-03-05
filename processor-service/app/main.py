@@ -1,10 +1,9 @@
-import logging
-from processor_config import ProcessorConfig
-from elastic_client import ElasticClient
-from mongo_connector import MongoManager
-from kafka_consumer import KafkaConsumer
-from logger import Logger
-from kafka_producer import KafkaProducer
+from app.processor_config import ProcessorConfig
+from app.elastic_client import ElasticClient
+from app.mongo_connector import MongoManager
+from app.kafka_consumer import KafkaConsumer
+from app.logger import Logger
+from app.kafka_producer import KafkaProducer
 
 logger = Logger.get_logger()
 

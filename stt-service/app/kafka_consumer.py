@@ -1,5 +1,6 @@
 from confluent_kafka import Consumer
-from logger import Logger
+from app.logger import Logger
+from shared.models import FileMetadataId
 import json
 
 class KafkaConsumer:
@@ -19,7 +20,7 @@ class KafkaConsumer:
             self.logger.exception(f"Could not connect Consumer to Kafka, Error: {str(e)}")
             raise
 
-    def start(self, sr, recognizer, stt_extractor, update_in_elastic):
+    def start(self, sr, recognizer, stt_extractor, update_in_elastic, send_to_kafka):
         """ 
         Supposed to start listening to kafka topic and send data to stt extractor and elastic update callbacks
         """
@@ -38,18 +39,29 @@ class KafkaConsumer:
                 self.logger.error(f"Could not decode msg, Error: {str(e)}")
 
             try:
+                pydantic_validated_value = FileMetadataId(**value)
+            except Exception as e:
+                self.logger.error(f"Could not validate pydantic types, Error: {str(e)}")
+
+            value = pydantic_validated_value.model_dump()
+            try:
                 speach_in_text = stt_extractor(sr, recognizer, value["file_path"])
                 self.logger.info(f"Extract text: {speach_in_text}")
             except Exception as e:
                 self.logger.error(f"Could not get text from speach, Error: {str(e)}")                
 
             try:
-                value["text"] = speach_in_text
+                value["file_text"] = speach_in_text
                 response = update_in_elastic(value["file_id"], value)
                 if response:
                     self.logger.info(f"Updated text in Elastic Search: %s", value)
             except Exception as e:
                 self.logger.error(f"Could not update text in Elastic, Error: {str(e)}") 
+
+            try:
+                send_to_kafka(value)
+            except Exception as e:
+                self.logger.error(f"Could not send raw text dict to kafka, Error: {str(e)}") 
 
     def stop(self):
         """ 

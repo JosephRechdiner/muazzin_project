@@ -1,7 +1,7 @@
 from app.logger import Logger
 import os
 
-class SttConfig:
+class AnalyticsConfig:
     """
     Config class is supposed to load env variables that are needed for this service
     """
@@ -12,7 +12,6 @@ class SttConfig:
         self.group_id = os.getenv("GROUP_ID")
         self.bootstrap_servers = os.getenv("BOOTSTRAP_SERVERS")
         self.listen_topic = os.getenv("LISTEN_TOPIC")
-        self.send_topic = os.getenv("SEND_TOPIC")
 
     def validate(self):
         """
@@ -30,8 +29,6 @@ class SttConfig:
             missing.append("INDEX_NAME")
         if not self.group_id:
             missing.append("GROUP_ID")
-        if not self.send_topic:
-            missing.append("SEND_TOPIC")
 
         if missing:
             msg = "|".join(missing) + " missing"

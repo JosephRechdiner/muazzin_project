@@ -2,13 +2,14 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-COPY ./stt-service/requirements.txt .
+COPY ./analytics-service/requirements.txt .
 
 RUN pip install -r requirements.txt
 
-COPY ./podcasts /app/podcasts
+COPY ./keys /app/keys
+
 COPY ./shared /app/shared
 
-COPY ./stt-service .
+COPY ./analytics-service .
 
 CMD [ "python", "-m", "app.main" ]
