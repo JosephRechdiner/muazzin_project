@@ -62,8 +62,7 @@ class ElasticManager:
         query = {
             "query": {
                 "term": {"is_bds": True} 
-            },
-            "size": 100
+            }
         }
         response = self.es.search(index=self.index_name, body=query)
         return self.get_hits(response)
@@ -80,8 +79,7 @@ class ElasticManager:
                         {"range": {"bds_percent": {"gte": threshold}}},
                     ]
                 }
-            },
-            "size": 100
+            }
         }
         response = self.es.search(index=self.index_name, body=query)
         return self.get_hits(response)
@@ -93,8 +91,7 @@ class ElasticManager:
         query = {
             "query": {
                 "match": {"file_text": word}
-            },
-            "size": 100
+            }
         }
         response = self.es.search(index=self.index_name, body=query)
         return self.get_hits(response)
