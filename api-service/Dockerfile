@@ -10,6 +10,6 @@ COPY ./shared /app/shared
 
 COPY ./api-service .
 
-EXPOSE 8500
+EXPOSE 8050
 
-CMD [ "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8500" ]
+CMD [ "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8050" ]

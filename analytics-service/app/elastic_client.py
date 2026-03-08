@@ -2,6 +2,9 @@ from app.logger import Logger
 from elasticsearch import Elasticsearch
 
 class ElasticClient:
+    """
+    class responsible for managing elastic connection
+    """
     def __init__(self, elastic_uri: str, index_name: str, logger: Logger):
         self.logger = logger
         self.index_name = index_name
@@ -11,6 +14,9 @@ class ElasticClient:
             self.logger.exception(f"Could not connect to ElasticSearch, Error: %s", str(e)) 
 
     def update_analyzed_info(self, file_id, analyzed_info):
+        """
+        function responsible for adding analyzed info to an existing document 
+        """
         try:
             self.es.update(index=self.index_name, id=file_id, body={"doc": analyzed_info, "doc_as_upsert": True})
             self.logger.info(f"Updated in elastic: {analyzed_info}")

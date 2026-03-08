@@ -1,4 +1,4 @@
-from logger import Logger
+from app.logger import Logger
 import os
 
 class ApiConfig:
@@ -9,6 +9,7 @@ class ApiConfig:
         self.logger = logger
         self.redis_host = os.getenv("REDIS_HOST")
         self.elastic_uri = os.getenv("ELASTIC_URI")
+        self.index_name = os.getenv("INDEX_NAME")
 
     def validate(self):
         """
@@ -20,6 +21,8 @@ class ApiConfig:
             missing.append("REDIS_HOST")
         if not self.elastic_uri:
             missing.append("ELASTIC_URI")
+        if not self.elastic_uri:
+            missing.append("INDEX_NAME")
 
         if missing:
             msg = "|".join(missing) + " missing"

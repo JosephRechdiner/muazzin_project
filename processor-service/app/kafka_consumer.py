@@ -54,7 +54,8 @@ class KafkaConsumer:
                     self.logger.info(f"Inserted to MongoDB: %s", value)
             except Exception as e:
                 self.logger.error(f"Could not save data in mongo, Error: {str(e)}")
-
+            
+            value["file_id"] = file_id
             try:
                 response = save_in_elastic_callback(file_id, value)
                 if response:
@@ -63,7 +64,6 @@ class KafkaConsumer:
                 self.logger.error(f"Could not save data in Elastic, Error: {str(e)}")
 
             try:
-                value["file_id"] = file_id
                 send_to_kafka(value)
             except Exception as e:
                 self.logger.error(f"Could not send data in Kafka, Error: {str(e)}")

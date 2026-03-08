@@ -4,6 +4,9 @@ from shared.models import FileMetadataText
 import json
 
 class KafkaConsumer:
+    """
+    class responsible for managing kafka consumer
+    """
     def __init__(self, bootstrap_server: str, listen_topic: str, group_id: str, logger: Logger):
         self.logger = logger
         self.listen_topic = listen_topic
@@ -15,6 +18,9 @@ class KafkaConsumer:
             self.logger.exception(f"Consumer could not connect to kafka, Error: {str(e)}")
 
     def start(self, analyze, update_analyzed_info_in_elastic):
+        """
+        function responsible for looping until server is down and polling msgs from kafka
+        """
         self.consumer.subscribe([self.listen_topic])
         while self._is_running:
             msg = self.consumer.poll(1.0)
@@ -48,5 +54,8 @@ class KafkaConsumer:
                 self.logger.error(f"Could not update analyed info in elastic, Error: {str(e)}")
 
     def stop(self):
+        """
+        function responsible for closing consumer at server shotdown
+        """
         self._is_running = False
         self.consumer.close()

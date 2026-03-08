@@ -1,5 +1,5 @@
 fastapi
 uvicorn
 redis
-elasticsearch
-elastictrasport
+elasticsearch==8.19.0
+elastic-transport==8.15.1

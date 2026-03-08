@@ -2,10 +2,16 @@ from app.logger import Logger
 import base64
 
 class DangerousWordsExtractor:
+    """
+    class responsible for extracting words from text files
+    """
     def __init__(self, logger: Logger):
         self.logger = logger
     
     def decode_text(self, file_path):
+        """
+        decoding not readable text
+        """
         try:
             with open(file_path, "r") as file:
                 text = file.read()
