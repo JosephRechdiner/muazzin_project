@@ -93,6 +93,8 @@
 # a = "hello"
 # print(1 & key)
 
+from hashlib import sha1
+
 from speech_recognition import Recognizer
 import speech_recognition as sr
 import glob
@@ -123,41 +125,45 @@ import io
 # print(sample_string)
 
 import base64
+import hashlib
+
+dhash = hashlib.md5()
+encoded = json.dumps(value, sort_keys=True).encode()
+dhash.update(encoded)
+file_id = dhash.hexdigest()
+
+# def decode_text(text):
+#     base64_string = text
+#     base64_bytes = base64_string.encode("ascii")
+
+#     sample_string_bytes = base64.b64decode(base64_bytes)
+#     sample_string = sample_string_bytes.decode("ascii")
+#     return sample_string.split(",")
+
+# with open("./keys/very_dangerous.txt", "r") as file:
+#     data = file.read()
+# very_dangerous = decode_text(data)
+# with open("./keys/less_dangerous.txt", "r") as file:
+#     data = file.read()
+# less_dangerous = decode_text(data)
 
 
+# def get_dangerous_rate(text: str):
+#     total_less_dangerous_words = 0
+#     total_very_dangerous_words = 0
+#     total_text_words = len(text.split(" "))
+#     rate = total_text_words
+#     for word in less_dangerous:
+#         if word.lower() in text.lower():
+#             total_less_dangerous_words += 1
+#             rate -= total_text_words / 200
+#     for word in very_dangerous:
+#         if word.lower() in text.lower():
+#             total_very_dangerous_words += 1
+#             rate -= total_text_words / 100
+#     return round((1 - rate / total_text_words) * 100, 2), total_less_dangerous_words, total_very_dangerous_words, total_text_words
 
-def decode_text(text):
-    base64_string = text
-    base64_bytes = base64_string.encode("ascii")
-
-    sample_string_bytes = base64.b64decode(base64_bytes)
-    sample_string = sample_string_bytes.decode("ascii")
-    return sample_string.split(",")
-
-with open("./keys/very_dangerous.txt", "r") as file:
-    data = file.read()
-very_dangerous = decode_text(data)
-with open("./keys/less_dangerous.txt", "r") as file:
-    data = file.read()
-less_dangerous = decode_text(data)
-
-
-def get_dangerous_rate(text: str):
-    total_less_dangerous_words = 0
-    total_very_dangerous_words = 0
-    total_text_words = len(text.split(" "))
-    rate = total_text_words
-    for word in less_dangerous:
-        if word.lower() in text.lower():
-            total_less_dangerous_words += 1
-            rate -= total_text_words / 200
-    for word in very_dangerous:
-        if word.lower() in text.lower():
-            total_very_dangerous_words += 1
-            rate -= total_text_words / 100
-    return round((1 - rate / total_text_words) * 100, 2), total_less_dangerous_words, total_very_dangerous_words, total_text_words
-
-text1 = "reports keep coming bomb schools destroyed hospitals families buried under Rubble each one adds to the long list of war crimes and the question is when will the ICC act how long can Justice be delayed before it becomes denial that's the painful part the evidence is there the testimonies are there yet accountability drags meanwhile family is under occupation live in constant fear children grew up hearing drones instead of lullabies parents wonder if tonight will be the night their home disappears and governments issue statements of concerned but do nothing mean meaningful that's why Global action from people matter so much movements like BDS International protests campaigns they apply pressure where leaders fail right and Justice isn't just about trials or courtrooms it's about recognition of suffering acknowledgment of crime and stopping them from happening again without accountability the cycle continues displacement Massacre's apartheid policies which is why resistance comes in many forms from families rebuilding their homes to students marching in the streets it's all part of saying enough"
+# text1 = "reports keep coming bomb schools destroyed hospitals families buried under Rubble each one adds to the long list of war crimes and the question is when will the ICC act how long can Justice be delayed before it becomes denial that's the painful part the evidence is there the testimonies are there yet accountability drags meanwhile family is under occupation live in constant fear children grew up hearing drones instead of lullabies parents wonder if tonight will be the night their home disappears and governments issue statements of concerned but do nothing mean meaningful that's why Global action from people matter so much movements like BDS International protests campaigns they apply pressure where leaders fail right and Justice isn't just about trials or courtrooms it's about recognition of suffering acknowledgment of crime and stopping them from happening again without accountability the cycle continues displacement Massacre's apartheid policies which is why resistance comes in many forms from families rebuilding their homes to students marching in the streets it's all part of saying enough"
 	
-text2 = "across the world protests are filling streets from University campuses to City squares people are standing up against Injustice chanting for Change and demanding action each protest Echoes the same message the humanitarian situation cannot continue lives are being destroyed families displaced and dignity denied people refuse to accept silence and these protests do more than raise awareness they apply real pressure governments may try to ignore the plight of Gaza but millions of voices can no longer be dismissed resistance can be noisy or quiet Publix or personal but every demonstration every rally every March contributes to the global call for Liberation free Palestine is more than a slogan it's a statement of solidarity with people who have endured Decades of Oppression and displacement exactly the power of protest is that it transforms grief into action and shows the world that Injustice will not be unnoticed"
-print(get_dangerous_rate(text1))
+# text2 = "across the world protests are filling streets from University campuses to City squares people are standing up against Injustice chanting for Change and demanding action each protest Echoes the same message the humanitarian situation cannot continue lives are being destroyed families displaced and dignity denied people refuse to accept silence and these protests do more than raise awareness they apply real pressure governments may try to ignore the plight of Gaza but millions of voices can no longer be dismissed resistance can be noisy or quiet Publix or personal but every demonstration every rally every March contributes to the global call for Liberation free Palestine is more than a slogan it's a statement of solidarity with people who have endured Decades of Oppression and displacement exactly the power of protest is that it transforms grief into action and shows the world that Injustice will not be unnoticed"
+# print(get_dangerous_rate(text1))

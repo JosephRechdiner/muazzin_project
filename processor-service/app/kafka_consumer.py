@@ -1,3 +1,6 @@
+from hashlib import sha1
+import hashlib
+
 from confluent_kafka import Consumer
 from app.logger import Logger
 from shared.models import FileMetadata
@@ -28,7 +31,7 @@ class KafkaConsumer:
         self.consumer.subscribe([self.listen_topic])
         self.logger.info(f"Consumer is now listennig to {self.listen_topic}...")
 
-        file_id = "1"
+        # file_id = "1"
         while self._is_running:
             msg = self.consumer.poll(1.0)
             if msg is None:
@@ -36,7 +39,7 @@ class KafkaConsumer:
             if msg.error():
                 self.logger.error(f"Error while pulling msg, %s", msg.error())
                 continue
-
+            
             try:
                 value = json.loads(msg.value().decode('utf-8'))
             except Exception:
@@ -48,6 +51,12 @@ class KafkaConsumer:
                 self.logger.error(f"Could not validate pydantic types, Error: {str(e)}")
 
             value = pydantic_validated_value.model_dump()
+
+            dhash = hashlib.md5()
+            encoded = json.dumps(value, sort_keys=True).encode()
+            dhash.update(encoded)
+            file_id = dhash.hexdigest()
+            value["file_id"] = file_id
             try:
                 response = save_in_mongo_callback(file_id, value["file_path"])
                 if response:
@@ -55,7 +64,6 @@ class KafkaConsumer:
             except Exception as e:
                 self.logger.error(f"Could not save data in mongo, Error: {str(e)}")
             
-            value["file_id"] = file_id
             try:
                 response = save_in_elastic_callback(file_id, value)
                 if response:
@@ -68,7 +76,7 @@ class KafkaConsumer:
             except Exception as e:
                 self.logger.error(f"Could not send data in Kafka, Error: {str(e)}")
 
-            file_id = str(int(file_id) + 1)
+            # file_id = str(int(file_id) + 1)
 
     def stop(self):
         """ 
