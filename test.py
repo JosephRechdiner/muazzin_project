@@ -148,11 +148,11 @@ def get_dangerous_rate(text: str):
     total_text_words = len(text.split(" "))
     rate = total_text_words
     for word in less_dangerous:
-        if word in text:
+        if word.lower() in text.lower():
             total_less_dangerous_words += 1
             rate -= total_text_words / 200
     for word in very_dangerous:
-        if word in text:
+        if word.lower() in text.lower():
             total_very_dangerous_words += 1
             rate -= total_text_words / 100
     return round((1 - rate / total_text_words) * 100, 2), total_less_dangerous_words, total_very_dangerous_words, total_text_words

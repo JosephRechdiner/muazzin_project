@@ -20,11 +20,11 @@ class TextAnalyzer:
         total_text_words = len(text.split(" "))
         rate = total_text_words
         for word in self.less_dangerous_decoded_list:
-            if word in text:
+            if word.lower() in text:
                 total_less_dangerous_words += 1
                 rate -= total_text_words / 200
         for word in self.very_dangerous_decoded_list:
-            if word in text:
+            if word.lower() in text:
                 total_very_dangerous_words += 1
                 rate -= total_text_words / 100
 

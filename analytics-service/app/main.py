@@ -34,7 +34,7 @@ def main():
         logger=logger,
         less_dangerous_decoded_list=less_dangerous_decoded_list,
         very_dangerous_decoded_list=very_dangerous_decoded_list,
-        threshold=2.5
+        threshold=5
     )
 
     consumer.start(
