@@ -38,8 +38,6 @@ class TextAnalyzer:
         stats["total_words"] = total_text_words
         stats["total_less_dangerous_words"] = total_less_dangerous_words
         stats["total_very_dangerous_words"] = total_very_dangerous_words
-        if rate < 0:
-            rate = 0
         stats["dangerous_rate"] = round((1 - (rate / total_text_words)) * 100, 2)
         return stats
 

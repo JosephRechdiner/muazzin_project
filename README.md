@@ -45,3 +45,32 @@ including updating the raw text into the metadata in Elastic Search.
 stt represent for SpeachToText,
 stt-service acts as a kafka consumer,
 text extraction is executed by SpeechRecognition library.
+
+---
+
+#  Third part
+
+The third part presents text analyzing.
+
+---
+
+##  analytics Service
+
+Analytics service acts as a kafka consumer.
+Once data is being recieved to the service, anlyzing functions get activated.
+Few text files have been given, each has some decoded text representing some very dangerous words and some less.
+
+Most of the analysis process is based on a field called "dangerous_rate", which is the percentage of dangerous words out of the text. 
+
+All analysis fields are updated in ElasticSearch Index.
+
+---
+
+#  Fouth part
+
+The forth part presents Api endpoints so the client will be able to get some relevant data.
+
+---
+
+##  api Service
+

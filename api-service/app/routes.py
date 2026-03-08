@@ -37,9 +37,19 @@ def get_metadata_by_id(
 
 @route.get("/metadatas/get-top-5-bds-percent")
 def get_top_5_bds_percent(
+    redis_manager: RedisManager = Depends(get_redis_manager), 
     elastic_manager: ElasticManager = Depends(get_elastic_manager) 
 ):
-    return elastic_manager.get_top_5_bds_percent()
+    redis_metadata = redis_manager.r.get("top-5-bds-percent")
+    if redis_metadata:
+        return {"Source": "Redis", "metadatas": json.loads(redis_metadata)}
+    
+    elsatic_metadata = elastic_manager.get_top_5_bds_percent()
+    redis_manager.r.set(name="top-5-bds-percent", value=json.dumps(elsatic_metadata))
+    if elsatic_metadata:
+        return {"Source": "ElasticSearch", "metadatas": elsatic_metadata}
+    
+    raise HTTPException(status_code=404, detail="No files metadatas found")
 
 @route.get("/metadatas/get-all-bds")
 def get_all_bds(
