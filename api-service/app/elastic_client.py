@@ -108,4 +108,4 @@ class ElasticManager:
             }
         }
         response = self.es.search(index=self.index_name, body=query)
-        return response["aggregations"]
+        return response["aggregations"]["bds_percent_average"]["value"]
