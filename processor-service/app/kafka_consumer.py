@@ -31,7 +31,6 @@ class KafkaConsumer:
         self.consumer.subscribe([self.listen_topic])
         self.logger.info(f"Consumer is now listennig to {self.listen_topic}...")
 
-        # file_id = "1"
         while self._is_running:
             msg = self.consumer.poll(1.0)
             if msg is None:
@@ -44,11 +43,13 @@ class KafkaConsumer:
                 value = json.loads(msg.value().decode('utf-8'))
             except Exception:
                 self.logger.error(f"Could not decode msg")
+                continue
 
             try:
                 pydantic_validated_value = FileMetadata(**value)
             except Exception as e:
                 self.logger.error(f"Could not validate pydantic types, Error: {str(e)}")
+                continue
 
             value = pydantic_validated_value.model_dump()
 
@@ -63,6 +64,7 @@ class KafkaConsumer:
                     self.logger.info(f"Inserted to MongoDB: %s", value)
             except Exception as e:
                 self.logger.error(f"Could not save data in mongo, Error: {str(e)}")
+                continue
             
             try:
                 response = save_in_elastic_callback(file_id, value)
@@ -70,13 +72,13 @@ class KafkaConsumer:
                     self.logger.info(f"Inserted to Elastic Search: %s", value)
             except Exception as e:
                 self.logger.error(f"Could not save data in Elastic, Error: {str(e)}")
+                continue
 
             try:
                 send_to_kafka(value)
             except Exception as e:
                 self.logger.error(f"Could not send data in Kafka, Error: {str(e)}")
-
-            # file_id = str(int(file_id) + 1)
+                continue
 
     def stop(self):
         """ 

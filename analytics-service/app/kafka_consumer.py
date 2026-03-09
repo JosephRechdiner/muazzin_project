@@ -22,6 +22,8 @@ class KafkaConsumer:
         function responsible for looping until server is down and polling msgs from kafka
         """
         self.consumer.subscribe([self.listen_topic])
+        self.logger.info(f"Consumer is now listennig to {self.listen_topic}...")
+
         while self._is_running:
             msg = self.consumer.poll(1.0)
             if not msg:
@@ -35,11 +37,13 @@ class KafkaConsumer:
                 value = json.loads(msg.value().decode('utf-8'))
             except Exception:
                 self.logger.error(f"Could not decode kafka msg")
+                continue
 
             try:
                 validated_pydantic_value = FileMetadataText(**value)
             except Exception:
                 self.logger.error(f"Could not validate pydantic types")
+                continue
             
             value = validated_pydantic_value.model_dump()
             try:
@@ -47,11 +51,13 @@ class KafkaConsumer:
                 self.logger.info(f"Analyzed info: {value['analyzed_info']}")
             except Exception as e:
                 self.logger.error(f"Could not analyze text, Error: {str(e)}")
+                continue
 
             try:
                 update_analyzed_info_in_elastic(value["file_id"], value["analyzed_info"])
             except Exception as e:
                 self.logger.error(f"Could not update analyed info in elastic, Error: {str(e)}")
+                continue
 
     def stop(self):
         """
