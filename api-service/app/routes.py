@@ -62,3 +62,9 @@ def get_metadatas_with_word_in_text(
     elastic_manager: ElasticManager = Depends(get_elastic_manager) 
 ):
     return elastic_manager.get_metadatas_with_word_in_text(word)
+
+@route.get("/metadatas/get-avg-bds")
+def get_avg_bds(
+    elastic_manager: ElasticManager = Depends(get_elastic_manager) 
+):
+    return elastic_manager.get_avg_bds()

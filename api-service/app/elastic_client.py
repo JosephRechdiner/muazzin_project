@@ -95,3 +95,17 @@ class ElasticManager:
         }
         response = self.es.search(index=self.index_name, body=query)
         return self.get_hits(response)
+
+    def get_avg_bds(self):
+        """
+        function responsible for getting the average of bds over all metadatas
+        """
+        query = {
+            "aggs": {
+                "bds_percent_average":
+                    { "avg": { "field": "bds_percent" }
+                }
+            }
+        }
+        response = self.es.search(index=self.index_name, body=query)
+        return response["aggregations"]
