@@ -1,4 +1,4 @@
-from app.logger import Logger
+from shared.logger import Logger
 import base64
 
 class DangerousWordsExtractor:
@@ -21,6 +21,6 @@ class DangerousWordsExtractor:
 
             sample_string_bytes = base64.b64decode(base64_bytes)
             sample_string = sample_string_bytes.decode("ascii")
-            return sample_string.split(",")
+            return [word.lower() for word in sample_string.split(",")]
         except Exception as e:
             self.logger.error(f"Could not decode text, Error: {str(e)}")

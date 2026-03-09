@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, Request, HTTPException
-from app.logger import Logger
 from app.redis_client import RedisManager
 from app.elastic_client import ElasticManager
 import json

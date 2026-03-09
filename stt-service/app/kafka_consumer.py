@@ -1,5 +1,5 @@
 from confluent_kafka import Consumer
-from app.logger import Logger
+from shared.logger import Logger
 from shared.models import FileMetadataId
 import json
 

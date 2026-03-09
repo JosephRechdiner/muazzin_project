@@ -2,10 +2,10 @@ from app.processor_config import ProcessorConfig
 from app.elastic_client import ElasticClient
 from app.mongo_connector import MongoManager
 from app.kafka_consumer import KafkaConsumer
-from app.logger import Logger
-from app.kafka_producer import KafkaProducer
+from shared.logger import Logger
+from shared.kafka_producer import KafkaProducer
 
-logger = Logger.get_logger()
+logger = Logger.get_logger(name="processor-service")
 
 def main():
     config = ProcessorConfig(logger)
@@ -39,7 +39,7 @@ def main():
     consumer.start(
         mongo_manager.insert_metadata,
         es.add_to_index,
-        producer.produce_to_kafka
+        producer.send_to_kafka
     )
 
 if __name__ == "__main__":

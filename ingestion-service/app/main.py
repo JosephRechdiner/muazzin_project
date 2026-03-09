@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.routes import router
-from app.kafka_producer import KafkaProducer
+from shared.kafka_producer import KafkaProducer
 from app.ingestion_config import IngestionConfig
-from app.logger import Logger
+from shared.logger import Logger
 
-logger = Logger.get_logger()
+logger = Logger.get_logger(name="ingestion-service")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

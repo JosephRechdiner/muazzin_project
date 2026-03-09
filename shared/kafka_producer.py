@@ -1,5 +1,5 @@
 from confluent_kafka import Producer
-from app.logger import Logger
+from shared.logger import Logger
 import json
 
 class KafkaProducer:
@@ -18,7 +18,7 @@ class KafkaProducer:
         else:
             self.logger.info(f"Sent to Kafka: %s", msg.value())
         
-    def produce_to_kafka(self, metadata: dict):
+    def send_to_kafka(self, metadata: dict):
         try:
             value = json.dumps(metadata).encode("utf-8")
             self.producer.produce(topic=self.send_topic, value=value, callback=self.delivery_report)

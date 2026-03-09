@@ -4,14 +4,14 @@ from app.routes import route
 from app.elastic_client import ElasticManager
 from app.redis_client import RedisManager
 from app.api_config import ApiConfig
-from app.logger import Logger
+from shared.logger import Logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
     function responsible for init all app.state varibles on app start
     """
-    app.state.logger = Logger().get_logger()
+    app.state.logger = Logger().get_logger(name="api-service")
     app.state.config = ApiConfig(logger=app.state.logger)
     app.state.config.validate()
     app.state.redis_manager = RedisManager(

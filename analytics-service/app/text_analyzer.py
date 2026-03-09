@@ -1,4 +1,4 @@
-from app.logger import Logger
+from shared.logger import Logger
 
 class TextAnalyzer:
     """
@@ -25,13 +25,14 @@ class TextAnalyzer:
         total_very_dangerous_words = 0
         total_text_words = len(text.split(" "))
         
+        text_words_list = text.split(" ")
         rate = total_text_words
-        for word in self.less_dangerous_decoded_list:
-            if word.lower() in text:
+
+        for word in text_words_list:
+            if word.lower() in self.less_dangerous_decoded_list:
                 total_less_dangerous_words += 1
                 rate -= total_text_words / 200
-        for word in self.very_dangerous_decoded_list:
-            if word.lower() in text:
+            elif word.lower() in self.very_dangerous_decoded_list:
                 total_very_dangerous_words += 1
                 rate -= total_text_words / 100
 
@@ -58,10 +59,10 @@ class TextAnalyzer:
         fuction responsible for categorization bds persentage
         """
         if stats["total_less_dangerous_words"] + stats["total_very_dangerous_words"] == 0:
-            return "None"
-        if 0 < stats["total_less_dangerous_words"] + stats["total_very_dangerous_words"] <= self.threshold:
+            return "none"
+        if 0 < stats["dangerous_rate"] < self.threshold:
             return "Meduim"
-        else:
+        elif stats["dangerous_rate"] >= self.threshold:
             return "High"
         
     def analyze(self, text):

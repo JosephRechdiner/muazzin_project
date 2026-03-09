@@ -1,8 +1,6 @@
-from hashlib import sha1
 import hashlib
-
 from confluent_kafka import Consumer
-from app.logger import Logger
+from shared.logger import Logger
 from shared.models import FileMetadata
 import json
 
