@@ -1,4 +1,4 @@
-from app.logger import Logger
+from shared.logger import Logger
 import os
 
 class ProcessorConfig:

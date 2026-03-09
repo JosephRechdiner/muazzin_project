@@ -1,4 +1,4 @@
-from app.logger import Logger
+from shared.logger import Logger
 from app.analytics_config import AnalyticsConfig
 from app.elastic_client import ElasticClient
 from app.dangerous_words_extractor import DangerousWordsExtractor
@@ -6,7 +6,7 @@ from app.kafka_consumer import KafkaConsumer
 from app.text_analyzer import TextAnalyzer
 
 
-logger = Logger().get_logger()
+logger = Logger().get_logger(name="analytics-service")
 
 def main():
     config = AnalyticsConfig(logger=logger)
@@ -34,7 +34,7 @@ def main():
         logger=logger,
         less_dangerous_decoded_list=less_dangerous_decoded_list,
         very_dangerous_decoded_list=very_dangerous_decoded_list,
-        threshold=2.5
+        threshold=5
     )
 
     consumer.start(

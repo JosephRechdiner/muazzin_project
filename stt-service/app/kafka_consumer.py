@@ -1,5 +1,5 @@
 from confluent_kafka import Consumer
-from app.logger import Logger
+from shared.logger import Logger
 from shared.models import FileMetadataId
 import json
 
@@ -25,6 +25,8 @@ class KafkaConsumer:
         Supposed to start listening to kafka topic and send data to stt extractor and elastic update callbacks
         """
         self.consumer.subscribe([self.listen_topic])
+        self.logger.info(f"Consumer is now listening to topic: {self.listen_topic}...")
+        
         while self._is_running:
             msg = self.consumer.poll(1.0)
             if not msg:
@@ -37,18 +39,21 @@ class KafkaConsumer:
                 value = json.loads(msg.value().decode("utf-8"))
             except Exception as e:
                 self.logger.error(f"Could not decode msg, Error: {str(e)}")
+                continue
 
             try:
                 pydantic_validated_value = FileMetadataId(**value)
             except Exception as e:
                 self.logger.error(f"Could not validate pydantic types, Error: {str(e)}")
+                continue
 
             value = pydantic_validated_value.model_dump()
             try:
                 speach_in_text = stt_extractor(sr, recognizer, value["file_path"])
                 self.logger.info(f"Extract text: {speach_in_text}")
             except Exception as e:
-                self.logger.error(f"Could not get text from speach, Error: {str(e)}")                
+                self.logger.error(f"Could not get text from speach, Error: {str(e)}")
+                continue       
 
             try:
                 value["file_text"] = speach_in_text
@@ -56,7 +61,8 @@ class KafkaConsumer:
                 if response:
                     self.logger.info(f"Updated text in Elastic Search: %s", value)
             except Exception as e:
-                self.logger.error(f"Could not update text in Elastic, Error: {str(e)}") 
+                self.logger.error(f"Could not update text in Elastic, Error: {str(e)}")
+                continue
 
             try:
                 send_to_kafka(value)

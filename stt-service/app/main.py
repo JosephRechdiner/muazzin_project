@@ -1,12 +1,12 @@
-from app.logger import Logger
+from shared.logger import Logger
 from app.stt_config import SttConfig
 from app.elastic_client import ElasticManager
 from app.kafka_consumer import KafkaConsumer
 from app.stt_handler import get_text_from_speach
-from app.kafka_producer import KafkaProducer
+from shared.kafka_producer import KafkaProducer
 import speech_recognition as sr
 
-logger = Logger.get_logger()
+logger = Logger.get_logger(name="stt-service")
 
 def main():
     config = SttConfig(logger=logger)
