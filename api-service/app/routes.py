@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Request, HTTPException
-from app.redis_client import RedisManager
-from app.elastic_client import ElasticManager
+from shared.redis.redis_client import RedisManager
+from shared.elastic.elastic_client import ElasticManager
 import json
 
 def get_redis_manager(request: Request):

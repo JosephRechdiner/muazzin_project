@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request, Depends, HTTPException
-from shared.kafka_producer import KafkaProducer
+from shared.kafka.kafka_producer import KafkaProducer
 from app.metadata_extractor import extract_metadata
-from shared.models import FileMetadata
+from shared.models.metadata import FileMetadata
 from app.ingestion_config import IngestionConfig
 import glob
 

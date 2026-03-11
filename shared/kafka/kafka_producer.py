@@ -1,5 +1,5 @@
 from confluent_kafka import Producer
-from shared.logger import Logger
+from shared.logger.logger import Logger
 import json
 
 class KafkaProducer:

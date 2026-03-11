@@ -1,9 +1,10 @@
-from shared.logger import Logger
+from shared.logger.logger import Logger
 from app.analytics_config import AnalyticsConfig
-from app.elastic_client import ElasticClient
+from shared.elastic.elastic_client import ElasticManager
 from app.dangerous_words_extractor import DangerousWordsExtractor
-from app.kafka_consumer import KafkaConsumer
+from shared.kafka.kafka_consumer import KafkaConsumer
 from app.text_analyzer import TextAnalyzer
+from app.analytics_handler import analyticsHandler
 
 
 logger = Logger().get_logger(name="analytics-service")
@@ -12,14 +13,14 @@ def main():
     config = AnalyticsConfig(logger=logger)
     config.validate()
 
-    es = ElasticClient(
+    es = ElasticManager(
         elastic_uri=config.elsatic_uri,
         index_name=config.index_name,
         logger=logger
     )
 
     consumer = KafkaConsumer(
-        bootstrap_server=config.bootstrap_servers,
+        bootstrap_servers=config.bootstrap_servers,
         listen_topic=config.listen_topic,
         group_id=config.group_id,
         logger=logger
@@ -37,10 +38,16 @@ def main():
         threshold=5
     )
 
-    consumer.start(
+    handler = analyticsHandler(
         analyze=analyzer.analyze,
-        update_analyzed_info_in_elastic=es.update_analyzed_info
+        update_analyzed_info_in_elastic=es.update_analyzed_info,
+        logger=logger
+        )
+
+    consumer.start(
+        handler.handle_event
     )
+
 
 if __name__ == "__main__":
     main()

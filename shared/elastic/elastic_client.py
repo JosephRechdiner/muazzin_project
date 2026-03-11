@@ -1,5 +1,5 @@
 from elasticsearch import Elasticsearch
-from shared.logger import Logger
+from shared.logger.logger import Logger
 
 
 class ElasticManager:
@@ -14,6 +14,58 @@ class ElasticManager:
         except Exception as e:
             self.logger.exception(f"Could not connect to elastic, Error: {str(e)}")
 
+    def create_index(self):
+        """ 
+        Supposed to create index if not exists in elsticshearch
+        """
+        mapping = {
+            "mappings": {
+                "properties": {
+                    "file_path": {"type": "keyword"},
+                    "file_name": {"type": "keyword"},
+                    "file_size": {"type": "integer"},
+                    "file_format": {"type": "keyword"},
+                    "created_at": {"type": "keyword"}
+                }
+            }
+        }
+        try:
+            if not self.es.indices.exists(index=self.index_name):
+                self.es.indices.create(self.index_name, body=mapping)
+        except Exception as e:
+            self.logger.exception(f"Could not create {self.index_name}, Error: {str(e)}")
+
+    def add_to_index(self, file_id: str, metadata: dict):
+        """ 
+        Supposed to insert on document in index
+        """
+        try:
+            res = self.es.index(index=self.index_name, id=file_id, document=metadata)
+            if res:
+                return True
+        except Exception as e:
+            self.logger.error(f"Could not insert {metadata}, Error: {str(e)}")
+
+    def update_analyzed_info(self, file_id, analyzed_info):
+        """
+        function responsible for adding analyzed info to an existing document 
+        """
+        try:
+            self.es.update(index=self.index_name, id=file_id, body={"doc": analyzed_info, "doc_as_upsert": True})
+            self.logger.info(f"Updated in elastic: {analyzed_info}")
+        except Exception as e:
+            self.logger.error(f"Could not update in elastic, Error: {str(e)}")
+
+    def update_text_in_elastic(self, file_id: str, metadata: dict):
+        """ 
+        Supposed to update the raw text field in index
+        """
+        try:
+            self.es.update(index=self.index_name, id=file_id, body={"doc": metadata, "doc_as_upsert": True})
+            self.logger.info(f"Elastic text field updated: {metadata['file_text']}")
+        except Exception as e:
+            self.logger.error(f"Could not updata text in ElasticSearch, Error: {str(e)}")
+            
     @staticmethod
     def get_hits(response):
         """
