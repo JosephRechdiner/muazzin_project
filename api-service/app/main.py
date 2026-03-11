@@ -1,10 +1,10 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from app.routes import route
-from app.elastic_client import ElasticManager
-from app.redis_client import RedisManager
+from shared.elastic.elastic_client import ElasticManager
+from shared.redis.redis_client import RedisManager
 from app.api_config import ApiConfig
-from shared.logger import Logger
+from shared.logger.logger import Logger
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):

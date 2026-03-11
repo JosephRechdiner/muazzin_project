@@ -1,4 +1,4 @@
-from shared.logger import Logger
+from shared.logger.logger import Logger
 import os
 
 class IngestionConfig:

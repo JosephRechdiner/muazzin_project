@@ -1,6 +1,6 @@
 import gridfs
 from pymongo import MongoClient
-from shared.logger import Logger
+from shared.logger.logger import Logger
 
 class MongoManager:
     """ 

@@ -1,10 +1,11 @@
-from shared.logger import Logger
+from shared.logger.logger import Logger
 from app.stt_config import SttConfig
-from app.elastic_client import ElasticManager
-from app.kafka_consumer import KafkaConsumer
-from app.stt_handler import get_text_from_speach
-from shared.kafka_producer import KafkaProducer
+from shared.elastic.elastic_client import ElasticManager
+from shared.kafka.kafka_consumer import KafkaConsumer
+from app.stt_extractor import get_text_from_speach
+from shared.kafka.kafka_producer import KafkaProducer
 import speech_recognition as sr
+from app.stt_handler import SttHandler
 
 logger = Logger.get_logger(name="stt-service")
 
@@ -17,7 +18,7 @@ def main():
         index_name=config.index_name,
         logger=logger
     )
-    
+
     consumer = KafkaConsumer(
         bootstrap_servers=config.bootstrap_servers,
         group_id=config.group_id,
@@ -33,12 +34,17 @@ def main():
 
     recognizer = sr.Recognizer()
 
-    consumer.start(
+    handler = SttHandler(
         recognizer=recognizer,
         sr=sr,
         stt_extractor=get_text_from_speach,
         update_in_elastic=es.update_text_in_elastic,
-        send_to_kafka=producer.send_to_kafka
+        send_to_kafka=producer.send_to_kafka,
+        logger=logger
+    )
+
+    consumer.start(
+        handler.handle_event
     )
 
 if __name__ == "__main__":

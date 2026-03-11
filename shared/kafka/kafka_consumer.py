@@ -1,23 +1,22 @@
 from confluent_kafka import Consumer
-from shared.logger import Logger
-from shared.models import FileMetadataText
+from shared.logger.logger import Logger
 import json
 
 class KafkaConsumer:
     """
     class responsible for managing kafka consumer
     """
-    def __init__(self, bootstrap_server: str, listen_topic: str, group_id: str, logger: Logger):
+    def __init__(self, bootstrap_servers: str, listen_topic: str, group_id: str, logger: Logger):
         self.logger = logger
         self.listen_topic = listen_topic
         self._is_running = True
         try:
-            self.consumer = Consumer({"bootstrap.servers": bootstrap_server, "group.id": group_id})
+            self.consumer = Consumer({"bootstrap.servers": bootstrap_servers, "group.id": group_id})
             self.logger.info(f"Consumer is connected to kafka")
         except Exception as e:
             self.logger.exception(f"Consumer could not connect to kafka, Error: {str(e)}")
 
-    def start(self, analyze, update_analyzed_info_in_elastic):
+    def start(self, callback):
         """
         function responsible for looping until server is down and polling msgs from kafka
         """
@@ -39,25 +38,7 @@ class KafkaConsumer:
                 self.logger.error(f"Could not decode kafka msg")
                 continue
 
-            try:
-                validated_pydantic_value = FileMetadataText(**value)
-            except Exception:
-                self.logger.error(f"Could not validate pydantic types")
-                continue
-            
-            value = validated_pydantic_value.model_dump()
-            try:
-                value["analyzed_info"] = analyze(value["file_text"])
-                self.logger.info(f"Analyzed info: {value['analyzed_info']}")
-            except Exception as e:
-                self.logger.error(f"Could not analyze text, Error: {str(e)}")
-                continue
-
-            try:
-                update_analyzed_info_in_elastic(value["file_id"], value["analyzed_info"])
-            except Exception as e:
-                self.logger.error(f"Could not update analyed info in elastic, Error: {str(e)}")
-                continue
+            callback(value)
 
     def stop(self):
         """

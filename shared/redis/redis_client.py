@@ -1,4 +1,4 @@
-from shared.logger import Logger
+from shared.logger.logger import Logger
 from redis import Redis
 
 class RedisManager:

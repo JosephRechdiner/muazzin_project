@@ -1,4 +1,4 @@
-from shared.logger import Logger
+from shared.logger.logger import Logger
 import os
 
 class ApiConfig:
@@ -21,7 +21,7 @@ class ApiConfig:
             missing.append("REDIS_HOST")
         if not self.elastic_uri:
             missing.append("ELASTIC_URI")
-        if not self.elastic_uri:
+        if not self.index_name:
             missing.append("INDEX_NAME")
 
         if missing:
